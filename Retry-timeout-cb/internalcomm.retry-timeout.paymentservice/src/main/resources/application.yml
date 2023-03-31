@@ -1,0 +1,35 @@
+server:
+  port: 10180
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  retry:
+    instances:
+      PaymentService:
+        maxAttempts: 3
+        waitDuration: 2s
+
+  circuitbreaker:
+    instances:
+      PaymentService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        #percentage
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED

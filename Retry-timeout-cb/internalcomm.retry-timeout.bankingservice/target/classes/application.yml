@@ -1,0 +1,9 @@
+server:
+  port: 10181
+
+resilience4j:
+  retry:
+    instances:
+      BankingService:
+        maxAttempts: 3
+        waitDuration: 2s
